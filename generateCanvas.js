@@ -23,7 +23,7 @@ function makeRow(className, length, yid, listen = false) {
     var newCell, xid, xyvalue;
     for (var i = 0; i <= length; i++) {
         xid = i.toString();
-        xyvalue = xid + ' ' + yid.toString();
+        xyvalue = xid + '-' + yid.toString();
         newCell = makeCell(className, xyvalue, listen);
         // set Cell's Parent to the Row
         newRow.appendChild(newCell);
