@@ -3,7 +3,100 @@
 
 var brushInUse = false;
 var currentColor = 'white';
-var cssIndex = 0; //until we can get document.styleSheets[0].rules.length to work
+var cssIndex = 0; // because styleSheets[0].rules inaccesible
+
+//-----------------\\
+//-----------------\\
+//-----------------\\
+/*Palette Maker*/
+
+function makePaletteDiv(className, palette, colorName) {
+    var newDiv = document.createElement('div');
+    newDiv.className = className;
+    newDiv.id = colorName;
+    document.styleSheets[0].addRule(('#' + colorName), ('background: ' + palette[colorName] + ';'), ++cssIndex);
+    return newDiv;
+}
+
+function makeColorDisplay(className, id) {
+    var newDiv = document.createElement('div');
+    newDiv.className = className;
+    newDiv.id = id;
+    var newContainer = document.createElement('div');
+    newContainer.className = 'displayContainer';
+    newContainer.appendChild(newDiv);
+    // document.body.appendChild(newContainer);
+    return newContainer;
+}
+
+//-----------------\\
+//-----------------\\
+//-----------------\\
+/*Pixel Table Makers*/
+
+function makeCell(className, idName, listen = false) {
+    // make a Data Cell
+    var newCell = document.createElement('td');
+    // make a Div
+    var newDiv = document.createElement('div');
+    // add classification (class variable)
+    newDiv.className = className;
+    // add id
+    newDiv.id = idName;
+    // set white color
+    newDiv.style.backgroundColor = 'white';
+    // set Div's Parent to the Cell
+    newCell.appendChild(newDiv);
+    // add listening functionality here
+    if (listen) {
+        newCell.addEventListener('click', startstopPainting);
+        newCell.addEventListener('mouseover', continuePainting);
+    }
+    return newCell;
+}
+
+function makeRow(className, length, yid, listen = false) {
+    // make a Row
+    var newRow = document.createElement('tr');
+    // make the divs (class, id='x# y#', listen)
+    var newCell, xid, xyvalue;
+    for (var i = 0; i <= length; i++) {
+        xid = i.toString();
+        xyvalue = xid + '-' + yid.toString();
+        newCell = makeCell(className, xyvalue, listen);
+        // set Cell's Parent to the Row
+        newRow.appendChild(newCell);
+    }
+    newRow.className = 'pixelContainer';
+    // add listening functionality here
+    if (listen) {
+        newRow.addEventListener('click', startstopPainting);
+        newRow.addEventListener('mouseover', continuePainting);
+    }
+    return newRow;
+}
+
+function makeTable(xsize, ysize, listen = false) {
+    // var body = document.getElementsByTagName('body');
+    // make a <table>
+    var newTable = document.createElement('table');
+    var className = 'pixel';
+    var newRow;
+    // LOOP with y-size
+    for (var i = ysize; i >= 0; i--) {
+        // makeRow(x-size, class=pixel, y#, listen)
+        newRow = makeRow(className, xsize, i, listen);
+        // set Parent to <table>
+        newTable.appendChild(newRow);
+    }
+    newTable.className = 'canvas';
+    // body[0].appendChild(newTable);
+    if (listen) {
+        newTable.addEventListener('click', startstopPainting);
+        newTable.addEventListener('mouseover', continuePainting);
+    }
+    return newTable;
+}
 
 //-----------------\\
 //-----------------\\
@@ -11,8 +104,16 @@ var cssIndex = 0; //until we can get document.styleSheets[0].rules.length to wor
 /*Event Functions*/
 
 function setColor(event) {
-    currentColor = event.target.id;
-    console.log('color set to', event.target.id);
+    var displays = document.getElementsByClassName('colorDisplay');
+    var clicked = event.target;
+    if ((clicked !== event.currentTarget) && (clicked.className === 'paletteContainer' || clicked.className === 'paletteColor')) {
+        currentColor = clicked.id;
+        for (var i in displays) {
+            displays[i].style.backgroundColor = currentColor;
+        }
+        console.log('color set to', currentColor);
+
+    }
 }
 
 function startstopPainting(event) {
@@ -47,76 +148,6 @@ function continuePainting(event) {
 //-----------------\\
 //-----------------\\
 //-----------------\\
-/*PixelMaker Functions*/
-
-function makeCell(className, idName, listen = false) {
-    // make a Data Cell
-    var newCell = document.createElement('td');
-    // make a Div
-    var newDiv = document.createElement('div');
-    // add classification (class variable)
-    newDiv.className = className;
-    // add id
-    newDiv.id = idName;
-    // set Div's Parent to the Cell
-    newCell.appendChild(newDiv);
-    // do I listen?
-    // add listening functionality here
-    if (listen) {
-        newCell.addEventListener('click', startstopPainting);
-        newCell.addEventListener('mouseover', continuePainting);
-    }
-    return newCell;
-}
-
-function makeRow(className, length, yid, listen = false) {
-    // make a Row
-    var newRow = document.createElement('tr');
-    // make the divs (class, id='x# y#', listen)
-    var newCell, xid, xyvalue;
-    for (var i = 0; i <= length; i++) {
-        xid = i.toString();
-        xyvalue = xid + '-' + yid.toString();
-        newCell = makeCell(className, xyvalue, listen);
-        // set Cell's Parent to the Row
-        newRow.appendChild(newCell);
-    }
-    newRow.className = 'pixelContainer';
-    // do I listen?
-    // add listening functionality here
-    if (listen) {
-        newRow.addEventListener('click', startstopPainting);
-        newRow.addEventListener('mouseover', continuePainting);
-    }
-    return newRow;
-}
-
-function makeTable(xsize, ysize, listen = false) {
-    var body = document.getElementsByTagName('body');
-    // make a <table>
-    var newTable = document.createElement('table');
-    var className = 'pixel';
-    var newRow;
-    // LOOP with y-size
-    for (var i = ysize; i >= 0; i--) {
-        // makeRow(x-size, class=pixel, y#, listen)
-        newRow = makeRow(className, xsize, i, listen);
-        // set Parent to <table>
-        newTable.appendChild(newRow);
-    }
-    body[0].appendChild(newTable);
-    if (listen) {
-        newTable.addEventListener('click', startstopPainting);
-        newTable.addEventListener('mouseover', continuePainting);
-    }
-    return newTable;
-}
-
-makeTable(10, 10, true);
-
-//-----------------\\
-//-----------------\\
-//-----------------\\
 /*Palette Functions*/
 
 function makePaletteDiv(className, palette, colorName) {
@@ -128,20 +159,21 @@ function makePaletteDiv(className, palette, colorName) {
 }
 
 function generatePalette(size, palette, listen = false) {
-    var className = 'palette-color';
+    console.log('palette received:', palette);
+    var className = 'paletteColor';
     var colorNames = Object.keys(palette);
     var paletteContainer = document.createElement('div');
     var paletteDiv;
     paletteContainer.className = 'paletteContainer';
-    document.body.appendChild(paletteContainer);
+    // document.body.appendChild(paletteContainer);
     if (size === 'all') {
         size = colorNames.length;
-        console.log(size);
+        // console.log(size);
     }
     for (var i = 0; i < size; i++) {
         paletteDiv = makePaletteDiv(className, palette, colorNames[i]);
         paletteContainer.appendChild(paletteDiv);
-        console.log('class', className, 'from palette', palette, 'color:', colorNames[i]);
+        // console.log('class', className, 'from palette', palette, 'color:', colorNames[i]);
     }
     if (listen) {
         paletteContainer.addEventListener('click', setColor);
@@ -149,12 +181,12 @@ function generatePalette(size, palette, listen = false) {
     return paletteContainer;
 }
 
-//-----------------\\
-//-----------------\\
-//-----------------\\
-/*Palette Creation*/
+//////////////////////////
+//////////////////////////
+//////////////////////////
 
-generatePalette('all', {
+/*Palette Colors Object*/
+var paletteColors = {
     'black': '#000000',
     'silver': '#c0c0c0',
     'gray': '#808080',
@@ -301,4 +333,49 @@ generatePalette('all', {
     'whitesmoke': '#f5f5f5',
     'yellowgreen': '#9acd32',
     'rebeccapurple': '#663399'
-}, true);
+};
+
+//-----------------\\
+//-----------------\\
+//-----------------\\
+/*Palette Generator*/
+
+var paletteElement = generatePalette(112, paletteColors, true);
+
+//-----------------\\
+//-----------------\\
+//-----------------\\
+/*Pixel Table Generator*/
+
+var canvasElement = makeTable(30, 13, true);
+
+//-----------------\\
+//-----------------\\
+//-----------------\\
+/*Color Display Generator*/
+
+var displayElementRightTop = makeColorDisplay('colorDisplay', 'displayRT');
+var displayElementLeftBottom = makeColorDisplay('colorDisplay', 'displayLB');
+var displayElementRightBottom = makeColorDisplay('colorDisplay', 'displayRB');
+//-----------------\\
+//-----------------\\
+//-----------------\\
+/*Table Setup*/
+var bodyTable = document.createElement('table');
+var tableRow = document.createElement('tr');
+var cell1 = document.createElement('td');
+var cell2 = document.createElement('td');
+var cell3 = document.createElement('td');
+document.body.appendChild(bodyTable);
+bodyTable.appendChild(tableRow);
+tableRow.appendChild(cell1);
+tableRow.appendChild(cell2);
+tableRow.appendChild(cell3);
+cell1.appendChild(paletteElement);
+cell1.className = 'paletteElement';
+cell2.appendChild(canvasElement);
+cell2.className = 'canvasElement';
+cell3.appendChild(displayElementRightTop);
+cell3.appendChild(displayElementLeftBottom);
+cell3.appendChild(displayElementRightBottom);
+cell3.className = 'displayElement';

@@ -50,37 +50,96 @@ table {
     box-sizing: border-box;
 }
 
+/*///////End of Reset/////////*/
+/*////Start of Stylesheet/////*/
+
+body {
+    background: rgba(76, 36, 74, .5);
+}
+
 td, tr, table {
     border: 0 solid black;
-    margin: 0 auto 0 auto;
+    margin: 0 0 0 0;
+    max-width: 100%;
+    max-height: 100%;
 }
 
-table {
+table, tr {
     border-collapse: collapse;
+    margin: auto;
 }
 
-.paletteContainer, .pixelContainer {
+.paletteElement, .canvasElement, .displayElement {
+  padding: 0;
   min-width: 100px;
   min-height: 100px;
-  max-height: 90%;
-  max-width: 90%;
+  max-height: 80%;
+  max-width: 70%;
+}
+
+.paletteElement, .displayElement {
+  width: 300px;
+  max-width: 10%;
+  height: 550px;
+}
+
+.paletteContainer, .pixelContainer, .displayContainer {
+  min-width: 100px;
+  min-height: 100px;
+  max-height: 100%;
+  max-width: 100%;
+  /*margin: auto;*/
+}
+
+.paletteContainer {
+  position: fixed;
+  top: 20px;
+  left: 5%;
+  width: 78%;
+  background: rgba(1, 152, 87, .3);
   margin: 0 auto 0 auto;
+  border-radius: 20px;
 }
 
-.pixel, .palette-color {
-    min-height: 20px;
-    min-width: 20px;
-    height: 50px;
-    width: 50px;
+.pixel, .paletteColor, .colorDisplay {
+    min-height: 40px;
+    min-width: 40px;
+    height: auto;
+    width: auto;
+    overflow: hidden;
 }
 
-.pixel {
+.paletteColor, .colorDisplay {
+    border: 2px dotted grey;
+    border-radius: 23px;
+    display: inline-block;
+    align-items: center;
+}
+
+.pixel, .canvas {
     border: 1px solid grey;
     margin: 0 auto 0 auto;
 }
 
-.palette-color {
-    display: inline-block;
-    border: 2px dotted grey;
-    border-radius: 25px;
+.canvas {
+  margin-top: 25px;
+  margin-bottom: 2%;
+}
+
+#displayRT {
+  position: fixed;
+  right: 100px;
+  top: 100px;
+}
+
+#displayRB {
+  position: fixed;
+  right: 50px;
+  bottom: 100px;
+}
+
+#displayLB {
+  position: fixed;
+  left: 50px;
+  bottom: 100px;
 }
