@@ -1,6 +1,7 @@
 'use strict';
 /*Paint Pixel*/
 
+var brushInUse = false;
 var currentColor = 'white';
 var cssIndex = 0; //until we can get document.styleSheets[0].rules.length to work
 
@@ -14,9 +15,33 @@ function setColor(event) {
     console.log('color set to', event.target.id);
 }
 
-function paintCurrentPixel(event) {
-    event.target.style.backgroundColor = currentColor;
-    // console.log('pixel', event.target, 'painted', currentColor);
+function startstopPainting(event) {
+    var targetCell = event.target;
+    if (targetCell.className === 'pixel') {
+        if (!brushInUse) {
+            brushInUse = true;
+        } else {
+            brushInUse = false;
+        }
+        if (brushInUse) {
+            event.target.style.backgroundColor = currentColor;
+            return;
+        } else {
+            return;
+        }
+        // console.log('pixel', event.target, 'painted', currentColor);
+    } else {
+        return;
+    }
+}
+
+function continuePainting(event) {
+    if (brushInUse) {
+        event.target.style.backgroundColor = currentColor;
+        return;
+    } else {
+        return;
+    }
 }
 
 //-----------------\\
@@ -38,7 +63,8 @@ function makeCell(className, idName, listen = false) {
     // do I listen?
     // add listening functionality here
     if (listen) {
-        newCell.addEventListener('click', paintCurrentPixel);
+        newCell.addEventListener('click', startstopPainting);
+        newCell.addEventListener('mouseover', continuePainting);
     }
     return newCell;
 }
@@ -59,7 +85,8 @@ function makeRow(className, length, yid, listen = false) {
     // do I listen?
     // add listening functionality here
     if (listen) {
-        newRow.addEventListener('click', paintCurrentPixel);
+        newRow.addEventListener('click', startstopPainting);
+        newRow.addEventListener('mouseover', continuePainting);
     }
     return newRow;
 }
@@ -79,7 +106,8 @@ function makeTable(xsize, ysize, listen = false) {
     }
     body[0].appendChild(newTable);
     if (listen) {
-        newTable.addEventListener('click', paintCurrentPixel);
+        newTable.addEventListener('click', startstopPainting);
+        newTable.addEventListener('mouseover', continuePainting);
     }
     return newTable;
 }
@@ -126,7 +154,7 @@ function generatePalette(size, palette, listen = false) {
 //-----------------\\
 /*Palette Creation*/
 
-generatePalette(25, {
+generatePalette('all', {
     'black': '#000000',
     'silver': '#c0c0c0',
     'gray': '#808080',
