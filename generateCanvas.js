@@ -347,7 +347,7 @@ var paletteElement = generatePalette(112, paletteColors, true);
 //-----------------\\
 /*Pixel Table Generator*/
 
-var canvasElement = makeTable(30, 13, true);
+var canvasElement = makeTable(60, 25, true);
 
 //-----------------\\
 //-----------------\\
