@@ -49,8 +49,9 @@ function makeCell(className, idName, listen = false) {
     newCell.appendChild(newDiv);
     // add listening functionality here
     if (listen) {
-        newCell.addEventListener('click', startstopPainting);
-        newCell.addEventListener('mouseover', continuePainting);
+      newCell.addEventListener('mousedown', startstopPainting);
+      newCell.addEventListener('mouseup', startstopPainting);
+      newCell.addEventListener('mouseover', continuePainting);
     }
     return newCell;
 }
@@ -70,8 +71,9 @@ function makeRow(className, length, yid, listen = false) {
     newRow.className = 'pixelContainer';
     // add listening functionality here
     if (listen) {
-        newRow.addEventListener('click', startstopPainting);
-        newRow.addEventListener('mouseover', continuePainting);
+      newRow.addEventListener('mousedown', startstopPainting);
+      newRow.addEventListener('mouseup', startstopPainting);
+      newRow.addEventListener('mouseover', continuePainting);
     }
     return newRow;
 }
@@ -92,7 +94,8 @@ function makeTable(xsize, ysize, listen = false) {
     newTable.className = 'canvas';
     // body[0].appendChild(newTable);
     if (listen) {
-        newTable.addEventListener('click', startstopPainting);
+        newTable.addEventListener('mousedown', startstopPainting);
+        newTable.addEventListener('mouseup', startstopPainting);
         newTable.addEventListener('mouseover', continuePainting);
     }
     return newTable;
@@ -124,12 +127,7 @@ function startstopPainting(event) {
         } else {
             brushInUse = false;
         }
-        if (brushInUse) {
-            event.target.style.backgroundColor = currentColor;
-            return;
-        } else {
-            return;
-        }
+        continuePainting(event);
         // console.log('pixel', event.target, 'painted', currentColor);
     } else {
         return;
@@ -139,6 +137,7 @@ function startstopPainting(event) {
 function continuePainting(event) {
     if (brushInUse) {
         event.target.style.backgroundColor = currentColor;
+        event.target.style.border=0;
         return;
     } else {
         return;
