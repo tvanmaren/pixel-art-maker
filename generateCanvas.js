@@ -357,6 +357,7 @@ var canvasElement = makeTable(60, 25, true);
 var displayElementRightTop = makeColorDisplay('colorDisplay', 'displayRT');
 var displayElementLeftBottom = makeColorDisplay('colorDisplay', 'displayLB');
 var displayElementRightBottom = makeColorDisplay('colorDisplay', 'displayRB');
+
 //-----------------\\
 //-----------------\\
 //-----------------\\
